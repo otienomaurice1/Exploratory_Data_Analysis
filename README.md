@@ -1,5 +1,6 @@
 Chemical Determinants of Wine Quality: A Data-Driven Analysis Using the UCI Wine Dataset
 ================
+Maurice Otieno, Wanos Bahiru, Biose Ugbo
 
 ## 1. Business Understanding
 
@@ -11,15 +12,66 @@ Based on background research and intuition, I hypothesize that features like hig
 
 This analysis is based on the UCI Wine Quality Data Set, which provides physicochemical and quality-related attributes for red and white variants of Portuguese “Vinho Verde” wine. The dataset includes chemical measurements such as alcohol, acidity, sugar, and sulfur dioxide levels, along with quality scores assigned by trained sensory panels. It was accessed from the UCI Machine Learning Repository, a widely used source for open datasets in applied machine learning and data science research. You can find the dataset here:[UCI Wine Quality Data Set](https://archive.ics.uci.edu/ml/datasets/wine+quality).
 
-Next we load the red wine dataset and explore its structure. The red and white wine datasets from the UCI Wine Quality Data Set were first loaded separately and then combined into a single dataset with an added type column to indicate wine variety. Initial inspection showed that the data contained no missing values and all variables were already numeric, eliminating the need for imputation or type conversion. The quality variable, which represents the wine’s rating by sensory analysts, was preserved in both numeric form (for correlation analysis) and as an ordered factor (for boxplots and group comparisons). No outliers were removed, as visual inspections of distributions indicated that extreme values were within realistic chemical ranges. Overall, the dataset required minimal cleaning and was ready for analysis after labeling, verification, and structure alignment. <img src="figures/Table1-1.png" style="display: block; margin: auto;" />
+Next we load the red wine dataset and explore its structure. The red and white wine datasets from the UCI Wine Quality Data Set were first loaded separately. Initial inspection showed that the data contained no missing values and all variables were already numeric, eliminating the need for imputation or type conversion. The quality variable, which represents the wine’s rating by sensory analysts, was preserved in both numeric form (for correlation analysis) and as an ordered factor (for boxplots and group comparisons). No outliers were removed, as visual inspections of distributions indicated that extreme values were within realistic chemical ranges. Overall, the dataset required minimal cleaning and was ready for analysis after labeling, verification, and structure alignment.
 
-<img src="EDA_files/figure-gfm/Table2-1.png" style="display: block; margin: auto auto auto 0;" />
+## Wine Feature Metadata
+
+| Feature | Type | Measurement_Level | Description |
+|:---|:---|:---|:---|
+| fixed.acidity | numeric | Ratio | Tartaric acid concentration (g/dm^3) |
+| volatile.acidity | numeric | Ratio | Acetic acid (vinegar-like) concentration (g/dm^3) |
+| citric.acid | numeric | Ratio | Citric acid concentration (g/dm^3) |
+| residual.sugar | numeric | Ratio | Residual sugar left after fermentation (g/dm^3) |
+| chlorides | numeric | Ratio | Salt content (g/dm^3) |
+| free.sulfur.dioxide | numeric | Ratio | Free SO2 (mg/dm^3) |
+| total.sulfur.dioxide | numeric | Ratio | Total SO2 (mg/dm^3) |
+| density | numeric | Ratio | Wine density (g/cm^3) |
+| pH | numeric | Interval | pH level of wine |
+| sulphates | numeric | Ratio | Sulphates for microbial stability (g/dm^3) |
+| alcohol | numeric | Ratio | Alcohol content (% vol) |
+| quality | integer | Ordinal | Taster-rated quality score (0–10) |
+
+Feature Descriptions with Type and Measurement Level
+
+## Red Wine Summary Statistics
+
+| Feature | Count | Mean | 1st Quartile | Median | 3rd Quartile | Min | Max |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| fixed.acidity | 1599 | 8.320 | 7.100 | 7.900 | 9.200 | 4.600 | 15.900 |
+| volatile.acidity | 1599 | 0.528 | 0.390 | 0.520 | 0.640 | 0.120 | 1.580 |
+| citric.acid | 1599 | 0.271 | 0.090 | 0.260 | 0.420 | 0.000 | 1.000 |
+| residual.sugar | 1599 | 2.539 | 1.900 | 2.200 | 2.600 | 0.900 | 15.500 |
+| chlorides | 1599 | 0.087 | 0.070 | 0.079 | 0.090 | 0.012 | 0.611 |
+| free.sulfur.dioxide | 1599 | 15.875 | 7.000 | 14.000 | 21.000 | 1.000 | 72.000 |
+| total.sulfur.dioxide | 1599 | 46.468 | 22.000 | 38.000 | 62.000 | 6.000 | 289.000 |
+| density | 1599 | 0.997 | 0.996 | 0.997 | 0.998 | 0.990 | 1.004 |
+| pH | 1599 | 3.311 | 3.210 | 3.310 | 3.400 | 2.740 | 4.010 |
+| sulphates | 1599 | 0.658 | 0.550 | 0.620 | 0.730 | 0.330 | 2.000 |
+| alcohol | 1599 | 10.423 | 9.500 | 10.200 | 11.100 | 8.400 | 14.900 |
+| quality | 1599 | 5.636 | 5.000 | 6.000 | 6.000 | 3.000 | 8.000 |
+
+Red Wine Summary Statistics
+
+## White Wine Summary Statistics
+
+| Feature | Count | Mean | 1st Quartile | Median | 3rd Quartile | Min | Max |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| fixed.acidity | 4898 | 6.855 | 6.300 | 6.800 | 7.300 | 3.800 | 14.200 |
+| volatile.acidity | 4898 | 0.278 | 0.210 | 0.260 | 0.320 | 0.080 | 1.100 |
+| citric.acid | 4898 | 0.334 | 0.270 | 0.320 | 0.390 | 0.000 | 1.660 |
+| residual.sugar | 4898 | 6.391 | 1.700 | 5.200 | 9.900 | 0.600 | 65.800 |
+| chlorides | 4898 | 0.046 | 0.036 | 0.043 | 0.050 | 0.009 | 0.346 |
+| free.sulfur.dioxide | 4898 | 35.308 | 23.000 | 34.000 | 46.000 | 2.000 | 289.000 |
+| total.sulfur.dioxide | 4898 | 138.361 | 108.000 | 134.000 | 167.000 | 9.000 | 440.000 |
+| density | 4898 | 0.994 | 0.992 | 0.994 | 0.996 | 0.987 | 1.039 |
+| pH | 4898 | 3.188 | 3.090 | 3.180 | 3.280 | 2.720 | 3.820 |
+| sulphates | 4898 | 0.490 | 0.410 | 0.470 | 0.550 | 0.220 | 1.080 |
+| alcohol | 4898 | 10.514 | 9.500 | 10.400 | 11.400 | 8.000 | 14.200 |
+| quality | 4898 | 5.878 | 5.000 | 6.000 | 6.000 | 3.000 | 9.000 |
+
+White Wine Summary Statistics
 
 The columns of the wine dataset represent a mix of physicochemical properties and a sensory-based quality score. Most features, such as fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulfur dioxide, density, pH, sulphates, and alcohol, are continuous numerical variables measured on a ratio scale. These values have a true zero and support meaningful arithmetic operations, making them suitable for statistical modeling and correlation analysis. The final column, quality, is a subjective score assigned by wine tasters on a scale from 0 to 10. This variable is ordinal, as it reflects a ranked assessment of wine quality but does not guarantee equal intervals between score values.
-
-<img src="EDA_files/figure-gfm/Table3-1.png" style="display: block; margin: auto;" /> For white whine , we can visualize the first few enties
-
-<img src="EDA_files/figure-gfm/Table4-1.png" style="display: block; margin: auto;" />
 
 ## 3. Exploratory Data Analysis
 
